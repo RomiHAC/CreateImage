@@ -6,6 +6,9 @@ class Pixel {
 public:
 	Pixel(unsigned char pixel = ' ');
 
+
+	
+	
 	bool operator==(const Pixel& other) const; 
 	bool operator!=(const Pixel& other) const;
 	Pixel operator|(const Pixel& other) const;
