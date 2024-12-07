@@ -104,7 +104,17 @@ Image& Image::operator+=(const Image& other) {
      return *this;
 }
 
+std::ostream& operator<<(std::ostream& output, const Image& temp_image)
+{
+    output << "Image (" << temp_image.W << "x" << temp_image.H << "):" << std::endl;
 
+    for (int row = 0; row < temp_image.H; ++row) {
+        for (int col = 0; col < temp_image.W; ++col) {
+            output << temp_image.pixels[row][col] << " "; 
+        }
+        output << std::endl;
+    }
 
+    return output;
 
-
+}
