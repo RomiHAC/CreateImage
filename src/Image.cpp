@@ -4,7 +4,7 @@
 Image::Image() : W(0), H(0), pixels(nullptr) {}
 
 Image::Image(int width, int height) : W(width), H(height) {
-    allocatePixels(width, height,32);
+    allocatePixels(width, height, ' ');
 }
 
 Image::Image(int width, int height, Pixel pixel) : W(width), H(height) {
@@ -18,7 +18,7 @@ void Image::allocatePixels(int width, int height, Pixel defaultPixel) {
     H = height;
 
     // Allocate memory
-    pixels = new Pixel*[H];
+    pixels = new Pixel * [H];
     for (int row = 0; row < H; ++row) {
         pixels[row] = new Pixel[W];
         for (int col = 0; col < W; ++col) {
@@ -52,31 +52,58 @@ Image Image::operator+(const Image& other) const {
     int newHeight = std::max(H, other.H);
     int newWidth = W + other.W;
 
-    Image result(newWidth, newHeight, Pixel(32)); 
+    // Create a new Image with uninitialized pixels
+    Image result;
+    result.allocatePixels(newWidth, newHeight, Pixel(' ')); 
 
-    
+    // Copy current image pixels
     for (int row = 0; row < H; ++row) {
         for (int col = 0; col < W; ++col) {
-            result.pixels[row][col] = pixels[row][col]; 
+            result.pixels[row][col] = pixels[row][col];
         }
     }
 
-    
+    // Copy other image pixels
     for (int row = 0; row < other.H; ++row) {
         for (int col = 0; col < other.W; ++col) {
-            result.pixels[row][col + W] = other.pixels[row][col]; 
+            result.pixels[row][col + W] = other.pixels[row][col];
         }
     }
 
-    return result; 
+    return result;
 }
 
 
-//problem the + operetor - cant use it
+
+Image& Image::operator=(const Image& other) {
+    if (this == &other) return *this;
+
+    
+    for (int i = 0; i < H; ++i) {
+        delete[] pixels[i];
+    }
+    delete[] pixels;
+
+
+    W = other.W;
+    H = other.H;
+
+   
+    allocatePixels(W, H, Pixel(0));
+    for (int row = 0; row < H; ++row) {
+        for (int col = 0; col < W; ++col) {
+            pixels[row][col] = other.pixels[row][col];
+        }
+    }
+
+    return *this;
+}
+
 Image& Image::operator+=(const Image& other) {
     *this =*this + other; 
      return *this;
 }
+
 
 
 
