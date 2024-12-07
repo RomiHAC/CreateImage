@@ -13,7 +13,12 @@ Image::Image(int width, int height, Pixel pixel) : W(width), H(height) {
 
 //have a problrm with  the width and hight?
 void Image::allocatePixels(int width, int height, Pixel defaultPixel) {
-    pixels = new Pixel * [H];
+    // Update class members
+    W = width;
+    H = height;
+
+    // Allocate memory
+    pixels = new Pixel*[H];
     for (int row = 0; row < H; ++row) {
         pixels[row] = new Pixel[W];
         for (int col = 0; col < W; ++col) {
@@ -21,6 +26,7 @@ void Image::allocatePixels(int width, int height, Pixel defaultPixel) {
         }
     }
 }
+
 bool Image::operator==(const Image& other) const {
     if (H != other.H || W != other.W) return false;
 
@@ -66,7 +72,7 @@ Image Image::operator+(const Image& other) const {
 }
 
 
-
+//problem the + operetor - cant use it
 Image& Image::operator+=(const Image& other) {
     *this =*this + other; 
      return *this;
