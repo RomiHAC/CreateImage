@@ -1,28 +1,25 @@
 #pragma once
-#include <iosfwd>
+#include "Pixel.h"
 
-class Pixel {
+class Image {
 
 public:
-	Pixel(unsigned char pixel = ' ');
-
-
+	Image();
+	Image(int width, int hight);
+	Image(int width, int hight, Pixel pixel);
 	
-	
-	bool operator==(const Pixel& other) const; 
-	bool operator!=(const Pixel& other) const;
-	Pixel operator|(const Pixel& other) const;
-	Pixel& operator|=(const Pixel& other);
-	Pixel operator&(const Pixel& other) const;
+	bool operator==(const Image& other) const;
+	bool operator!=(const Image& other) const;
+	Image operator+(const Image& other)const  ;
+	Image& operator=(const Image& other);
+	Image& operator+=(const Image& other);
 
-	Pixel& operator&=(const Pixel& other);
-	
 
-	friend  std::ostream& operator<< (std::ostream& output, const Pixel& pixel);
-
-	
 
 
 private:
-	unsigned char color;
+	int W;
+	int H ;
+	Pixel **pixels;
+	void allocatePixels(int width, int height, Pixel defaultPixel);
 };
