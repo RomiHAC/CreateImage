@@ -1,25 +1,29 @@
 #pragma once
-#include "Pixel.h"
+#include <iostream>
 
-class Image {
+class Pixel {
+private:
+    unsigned char color;
 
 public:
-	Image();
-	Image(int width, int hight);
-	Image(int width, int hight, Pixel pixel);
-	
-	bool operator==(const Image& other) const;
-	bool operator!=(const Image& other) const;
-	Image operator+(const Image& other)const  ;
-	Image& operator=(const Image& other);
-	Image& operator+=(const Image& other);
+    static const unsigned char BLACK;
+    static const unsigned char GRAY;
+    static const unsigned char WHITE;
 
+    // Constructor
+    Pixel(unsigned char pixel = WHITE);
 
+    // Comparison operators
+    bool operator==(const Pixel& other) const;
+    bool operator!=(const Pixel& other) const;
 
+    // Logical operators
+    Pixel operator|(const Pixel& other) const;
+    Pixel& operator|=(const Pixel& other);
 
-private:
-	int W;
-	int H ;
-	Pixel **pixels;
-	void allocatePixels(int width, int height, Pixel defaultPixel);
+    Pixel operator&(const Pixel& other) const;
+    Pixel& operator&=(const Pixel& other);
+
+    // Stream output
+    friend std::ostream& operator<<(std::ostream& output, const Pixel& pixel);
 };
