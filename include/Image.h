@@ -9,15 +9,21 @@ public:
 	Image(int width, int hight);
 	Image(int width, int hight, Pixel pixel);
 
-	~Image();
 	
-	bool operator==(const Image& other) const;
-	bool operator!=(const Image& other) const;
+	
+	
 	Image operator+(const Image& other)const  ;
 	Image& operator=(const Image& other);
 	Image& operator+=(const Image& other);
 	Image operator|(const Image& other) const;
 	Image& operator|=(const Image& other);
+	Image operator&(const Image& other) const;
+	Image& operator&=(const Image& other);
+	Image operator*(unsigned int N) const;
+	Image& operator~();
+	const Pixel& operator()(unsigned int X, unsigned int Y) const;
+	Pixel& operator()(unsigned int X, unsigned int Y);
+	
 
 
 
@@ -28,9 +34,10 @@ public:
 private:
 	int W;
 	int H ;
-	Pixel **pixels;
-	void allocatePixels(int width, int height, Pixel defaultPixel);
+	Pixel pixel;
+	//void allocatePixels(int width, int height, Pixel defaultPixel);
 };
 
-
+bool operator==(const Image& first , const Image& other)  ;
+bool operator!=(const Image& first, const Image& other) ;
 std::ostream& operator<<(std::ostream& output, const Image& temp_image);
