@@ -13,9 +13,8 @@ public:
     // Constructor
     Pixel(unsigned char pixel = WHITE);
 
-    // Comparison operators
-    bool operator==(const Pixel& other) const;
-    bool operator!=(const Pixel& other) const;
+    
+   
 
     // Logical operators
     Pixel operator|(const Pixel& other) const;
@@ -30,5 +29,7 @@ public:
     // Stream output
     //std::ostream& operator<<(std::ostream& output, const Pixel& pixel);
 };
+bool operator==(const Pixel&  first,const Pixel& other) ;
+bool operator!=(const Pixel& first, const Pixel& other) ;
 //made globali
 std::ostream& operator<<(std::ostream& output, const Pixel& pixel);
