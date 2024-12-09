@@ -14,12 +14,12 @@ Pixel::Pixel(unsigned char pixel) {
 }
 
 // Comparison operators
-bool Pixel::operator==(const Pixel& other) const {
-    return (*this).getColor() == other.getColor();
+bool operator==(const Pixel& first,const Pixel& other)  {
+    return first.getColor() == other.getColor();
 }
 
-bool Pixel::operator!=(const Pixel& other) const {
-    return !((*this) == other);
+bool operator!=(const Pixel& first, const Pixel& other)  {
+    return !(first == other);
 }
 
 // Logical operators
@@ -42,9 +42,9 @@ Pixel& Pixel::operator&=(const Pixel& other) {
 }
 
 // Stream output
-std::ostream& operator<<(std::ostream& output, const Pixel& pixel) {
-    output << pixel.getColor();
-    return output;
+std::ostream& operator<<(std::ostream& os, const Pixel& pixel) {
+    os << pixel.getColor();
+    return os;
 }
 
 Pixel& Pixel::operator=(const Pixel& other)  {
