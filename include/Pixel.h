@@ -24,6 +24,11 @@ public:
     Pixel operator&(const Pixel& other) const;
     Pixel& operator&=(const Pixel& other);
 
+    Pixel& operator=(const Pixel& other);
+   char getColor() const;
+
     // Stream output
-    friend std::ostream& operator<<(std::ostream& output, const Pixel& pixel);
+    //std::ostream& operator<<(std::ostream& output, const Pixel& pixel);
 };
+//made globali
+std::ostream& operator<<(std::ostream& output, const Pixel& pixel);
