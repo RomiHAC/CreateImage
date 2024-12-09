@@ -10,6 +10,13 @@ Image::Image(int width, int height) : W(width), H(height) {
 Image::Image(int width, int height, Pixel pixel) : W(width), H(height) {
     allocatePixels(width, height, pixel);
 }
+Image::~Image()
+{
+    for (int row = 0; row < H; ++row) {
+        delete pixels[row];
+    }
+    delete[] pixels;
+}
 
 //have a problrm with  the width and hight?
 void Image::allocatePixels(int width, int height, Pixel defaultPixel) {
@@ -79,7 +86,7 @@ Image& Image::operator=(const Image& other) {
     if (this == &other) return *this;
 
     
-    for (int i = 0; i < H; ++i) {
+    for (int i = 0; i < (*this).getHeight(); ++i) {
         delete[] pixels[i];
     }
     delete[] pixels;
@@ -89,9 +96,9 @@ Image& Image::operator=(const Image& other) {
     H = other.H;
 
    
-    allocatePixels(W, H, Pixel(0));
-    for (int row = 0; row < H; ++row) {
-        for (int col = 0; col < W; ++col) {
+    allocatePixels((*this).getWidth(), (*this).getHeight(), Pixel(0));
+    for (int row = 0; row < (*this).getHeight(); ++row) {
+        for (int col = 0; col < (*this).getWidth(); ++col) {
             pixels[row][col] = other.pixels[row][col];
         }
     }
@@ -104,12 +111,16 @@ Image& Image::operator+=(const Image& other) {
      return *this;
 }
 
+
+
 std::ostream& operator<<(std::ostream& output, const Image& temp_image)
 {
-    output << "Image (" << temp_image.W << "x" << temp_image.H << "):" << std::endl;
+    
+    output << "Image (" << temp_image.getWidth() << "x" << temp_image.getHeight() << "):" << std::endl;
 
-    for (int row = 0; row < temp_image.H; ++row) {
-        for (int col = 0; col < temp_image.W; ++col) {
+    for (int row = 0; row < temp_image.getHeight(); ++row) {
+        for (int col = 0; col < temp_image.getWidth(); ++col) {
+            //need to make function to get the pixels
             output << temp_image.pixels[row][col] << " "; 
         }
         output << std::endl;
@@ -118,3 +129,35 @@ std::ostream& operator<<(std::ostream& output, const Image& temp_image)
     return output;
 
 }
+
+Image Image::operator|(const Image& other) const {
+   int maxW = std::max(W, other.W);
+    int maxH = std::max((*this).getHeight(), other.getHeight());
+    Image new_return(maxW, maxH, Pixel(' '));
+   
+    for (int row = 0; row < maxW; row++) {
+        for (int col = 0; col < maxH; col++) {
+            new_return.pixels[row][col] = pixels[row][col] | other.pixels[row][col];
+        }
+
+    }
+
+    return new_return;
+
+}
+Image& Image::operator|=(const Image& other)  {
+    *this = *this | other;
+    return *this;
+
+}
+
+int Image::getHeight() const 
+{
+    return H;
+}
+int Image::getWidth() const
+{
+    return W;
+}
+ 
+
