@@ -1,5 +1,6 @@
 #pragma once
 #include "Pixel.h"
+#include "ImageDS.h";
 #include <iosfwd>
 
 class Image {
@@ -7,34 +8,36 @@ class Image {
 public:
 	Image();
 	Image(int width, int hight);
+	Image(const Image& other);
 	Image(int width, int hight, Pixel pixel);
 
 	
 	
 	
-	Image operator+(const Image& other)const  ;
-	Image& operator=(const Image& other);
-	Image& operator+=(const Image& other);
+	Image operator+(const Image& other)const;
+	void operator=(const Image& other);
+	void operator+=(const Image& other);
 	Image operator|(const Image& other) const;
-	Image& operator|=(const Image& other);
+	void operator|=(const Image& other);
 	Image operator&(const Image& other) const;
-	Image& operator&=(const Image& other);
+	void operator&=(const Image& other);
 	Image operator*(unsigned int N) const;
 	Image& operator~();
-	const Pixel& operator()(unsigned int X, unsigned int Y) const;
+
+
+	const Pixel operator()(unsigned int X, unsigned int Y) const;
 	Pixel& operator()(unsigned int X, unsigned int Y);
+
 	
-
-
-
-
 	int getHeight() const;
 	int getWidth() const;
 
 private:
 	int W;
-	int H ;
-	Pixel pixel;
+	int H;
+	ImageDS DSimg;
+
+	
 	//void allocatePixels(int width, int height, Pixel defaultPixel);
 };
 
