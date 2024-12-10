@@ -1,21 +1,28 @@
 #pragma once
 #include "Pixel.h"
-#include "Image.h"
 
-struct IMAGES {
-	IMAGES(IMAGES* next, Image next_image);
-	IMAGES* data_images;
-	Image image;
-};
 class ImageDS {
-
 public:
-	
-	ImageDS(Image current_image, IMAGES new_image);
+    ImageDS();                                  
+    ImageDS(int width, int height);            
+    ImageDS(int width, int height, Pixel pixel); 
+    ImageDS(const ImageDS& other);           
+    ~ImageDS();                                
+
+    ImageDS& operator=(const ImageDS& other);  
+
+    Pixel getPixel(int x, int y) const;       
+    Pixel& getPixel(int x, int y);             
+    void setPixel(int x, int y, const Pixel& pixel); 
+
+    int GetWidth() const;                     
+    int GetHeight() const;                    
 
 private:
-	Image storage_image;
-	Pixel** pixels;
-	IMAGES* head;
-	unsigned int count=0;
+    int width;                              
+    int height;                              
+    Pixel** pixels;                       
+
+    void allocatePixels(int width, int height); 
+    void deallocatePixels();                   
 };
