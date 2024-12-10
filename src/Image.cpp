@@ -1,50 +1,29 @@
 #include <iostream>
 #include "Image.h"
+#include "Pixel.h"
 
-Image::Image() : W(0), H(0), pixel(' ') {}
 
-Image::Image(int width, int height) : pixel(' ') {
-    W = width > 0 ? width : 0;
-    H = height > 0 ? height : 0;
-   // allocatePixels(width, height, ' ');
+
+// Default Constructor
+Image::Image() : W(0), H(0), DSimg(0, 0, Pixel()) {
+    
 }
 
-Image::Image(int width, int height, Pixel pixel) : pixel(pixel) {
-    W = width > 0 ? width : 0;
-    H = height > 0 ? height : 0;
-    //allocatePixels(width, height, pixel);
+// Constructor with width and height
+Image::Image(int width, int height) : W(width), H(height), DSimg(width, height, Pixel()) {
+   
 }
 
+// Constructor with width, height, and a pixel
+Image::Image(int width, int height, Pixel pixel) : W(width), H(height), DSimg(width, height, pixel) {
+    
+}
 
+// Copy Constructor
+Image::Image(const Image& other) : W(other.W), H(other.H), DSimg(other.DSimg) {
+    // Copy constructor: copies the dimensions and DSimg from another Image.
+}
 
-/*Image::~Image()
-{
-    for (int row = 0; row < H; ++row) {
-        delete pixels[row];
-    }
-    delete[] pixels;
-}*/
-
-
-
-
-
-
-//have a problrm with  the width and hight?
-/*void Image::allocatePixels(int width, int height, Pixel defaultPixel) {
-   // Update class members
-    W = width;
-    H = height;
-
-    // Allocate memory
-    pixel = new Pixel * [H];
-    for (int row = 0; row < H; ++row) {
-        pixels[row] = new Pixel[W];
-        for (int col = 0; col < W; ++col) {
-            pixels[row][col] = defaultPixel;
-        }
-    }
-}*/
 
 
 
@@ -57,9 +36,9 @@ bool operator==(const Image& first, const Image& other)
     if ( difH != 0 || difW != 0) return false;
     for (int row = 0; row < first.getHeight(); ++row) {
         for (int col = 0; col < first.getWidth(); ++col) {
-            //if (pixel[row][col] != other.pixel[row][col]) {
-              //  return false;
-            //}
+            if (first(row,col) != other(row,col)) {
+              return false;
+            }
         }
     }
     return true;
@@ -71,7 +50,7 @@ bool operator!=(const Image& first, const Image& other)  {
     return !(first == other);
 
 }
-
+ 
 
 Image Image::operator+(const Image& other) const {
     int newHeight = std::max(H, other.H);
@@ -79,19 +58,19 @@ Image Image::operator+(const Image& other) const {
 
     // Create a new Image with uninitialized pixels
     Image result(newWidth, newHeight,Pixel(' '));
-    //result.allocatePixels(newWidth, newHeight, Pixel(' ')); 
+    
 
     // Copy current image pixels
     for (int row = 0; row < H; ++row) {
         for (int col = 0; col < W; ++col) {
-           // result.pixels[row][col] = pixels[row][col];
+           result(row,col) = (*this)(row,col);
         }
     }
 
     // Copy other image pixels
     for (int row = 0; row < other.H; ++row) {
         for (int col = 0; col < other.W; ++col) {
-            //result.pixels[row][col + W] = other.pixels[row][col];
+            result(row, col + W) = other(row,col);
         }
     }
 
@@ -100,33 +79,26 @@ Image Image::operator+(const Image& other) const {
 
 
 
-Image& Image::operator=(const Image& other) {
-    if (this == &other) return *this;
+void Image::operator=(const Image& other) {
+    if (this == &other) return;
 
     
-   // for (int i = 0; i < (*this).getHeight(); ++i) {
-    //    delete[] pixels[i];
-  //  }
-   // delete[] pixels;
-
-
+    
     W = other.getWidth();
     H = other.getHeight();
+    Image temp(W, H, ' ');
 
-   
-    //allocatePixels((*this).getWidth(), (*this).getHeight(), Pixel(0));
-   // for (int row = 0; row < (*this).getHeight(); ++row) {
-   //     for (int col = 0; col < (*this).getWidth(); ++col) {
-   //         pixels[row][col] = other.pixels[row][col];
-     //   }
-   // }
-
-    return *this;
+    for (int row = 0; row < (*this).getHeight(); ++row) {
+       for (int col = 0; col < (*this).getWidth(); ++col) {
+           temp(row,col) = other(row,col);
+       }
+   }
+    //(*this)(temp);
+    
 }
 
-Image& Image::operator+=(const Image& other) {
-    *this =*this + other; 
-     return *this;
+void Image::operator+=(const Image& other) {
+    *this = *this + other;  
 }
 
 
@@ -140,8 +112,8 @@ std::ostream& operator<<(std::ostream& os, const Image& temp_image)
 
     for (int row = 0; row < temp_image.getHeight(); ++row) {
         for (int col = 0; col < temp_image.getWidth(); ++col) {
-            //need to make function to get the pixels
-            //os << temp_image.pixels[row][col] << " "; 
+            
+            os << temp_image(row,col) << " "; 
         }
         os << std::endl;
     }
@@ -163,20 +135,19 @@ Image Image::operator|(const Image& other) const {
         for (int col = 0; col < maxW; col++) {
 
              
-            //Pixel pixelA = (row < H && col < W) ? pixels[row][col] : Pixel(' ');        // Get pixel from current image or default
-           // Pixel pixelB = (row < other.H && col < other.W) ? other.pixels[row][col] : Pixel(' '); // Get pixel from other image or default
+            Pixel pixelA = (row < H && col < W) ? (*this)(row,col) : Pixel(' ');        // Get pixel from current image or default
+            Pixel pixelB = (row < other.H && col < other.W) ? other(row,col) : Pixel(' '); // Get pixel from other image or default
 
-            // Define the union logic for combining two pixels
-           // new_return.pixels[row][col] = pixelA | pixelB; // Assuming `Pixel` supports the `|` operator
+            //Define the union logic for combining two pixels
+            new_return(row,col) = pixelA | pixelB; // Assuming `Pixel` supports the `|` operator
         }
     }
 
     return new_return;
 }
 
-Image& Image::operator|=(const Image& other)  {
+void Image::operator|=(const Image& other)  {
     *this = *this | other;
-    return *this;
 
 }
 
@@ -191,42 +162,47 @@ Image Image::operator&(const Image& other) const  {
     for (int row = 0; row < minW; row++) {
         for (int col = 0; col < minH; col++) {
 
-            //Pixel pixelA = (row < H && col < W) ? pixels[row][col] : Pixel(' ');        // Get pixel from current image or default
-            // Pixel pixelB = (row < other.H && col < other.W) ? other.pixels[row][col] : Pixel(' '); // Get pixel from other image or default
+            Pixel pixelA = (row < H && col < W) ? (*this)(row, col) : Pixel(' ');        // Get pixel from current image or default
+            Pixel pixelB = (row < other.H && col < other.W) ? other(row, col) : Pixel(' '); // Get pixel from other image or default
 
-            // Define the union logic for combining two pixels
-           // new_return.pixels[row][col] = pixelA & pixelB; // 
+            //Define the union logic for combining two pixels
+            new_return(row, col) = pixelA & pixelB; // Assuming `Pixel` supports the `&` operator
         }
     }
 
     return new_return;
-
+    
 }
-Image& Image::operator&=(const Image& other) {
+void  Image::operator&=(const Image& other) {
     *this = *this & other;
-    return *this;
-
+  
+    
 }
 Image Image::operator*(unsigned int N) const {
-    Image add_images = *this;
-    for (int start = 0; start < N; start++) {
-        add_images += add_images;
+    Image result; // Start with a default empty image
+    for (unsigned int i = 0; i < N; ++i) {
+        result += *this; // Accumulate the current image N times
     }
-
-
-    return add_images;
+    return result;
 }
+
+//Image Image::operator(unsigned int N)*(Image i) const {
+  //  Image add_images = *this;
+   // return add_images * N;
+//}
+
+
 Image& Image::operator~() {
 
     for (int row = 0; row < (*this).getHeight(); row++) {
         for (int col = 0; col < (*this).getWidth(); col++) {
             //need to use imageDS for the arrey
-              if(pixel[row][col] == Pixel ::WHITE){
-                 pixel[row][col] = Pixel::BLACK;
+              if((*this)(row,col) == Pixel ::WHITE){
+                 (*this)(row,col) = Pixel::BLACK;
              
               }
-              else if(pixel[row][col] == Pixel::BLACK) {
-                    pixel[row][col] = Pixel::WHITE;
+              else if((*this)(row, col) == Pixel::BLACK) {
+                  (*this)(row, col) = Pixel::WHITE;
                  
                }
             
@@ -235,15 +211,14 @@ Image& Image::operator~() {
     } 
     
 }
-const Pixel& Image::operator()(unsigned int X, unsigned int Y) const {
+const Pixel Image::operator()(unsigned int X, unsigned int Y) const {
     //return the pixel(x,y) ;
 }
- Pixel& Image::operator()(unsigned int X, unsigned int Y)  {
+Pixel& Image::operator()(unsigned int X, unsigned int Y)  {
     //return the pixel(x,y) ;
 }
 
-
-
+ 
 int Image::getHeight() const 
 {
     return H;
