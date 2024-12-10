@@ -13,9 +13,6 @@ public:
     // Constructor
     Pixel(unsigned char pixel = WHITE);
 
-   
-   
-
     // Logical operators
     Pixel operator|(const Pixel& other) const;
     Pixel& operator|=(const Pixel& other);
@@ -24,11 +21,13 @@ public:
     Pixel& operator&=(const Pixel& other);
 
     Pixel& operator=(const Pixel& other);
-    char getColor() const;
 
-   
+    unsigned char getColor() const; // Updated to return unsigned char
 };
-bool operator==(const Pixel&  first,const Pixel& other) ;
-bool operator!=(const Pixel& first, const Pixel& other) ;
-//made globali
+
+// Comparison operators
+bool operator==(const Pixel& first, const Pixel& other);
+bool operator!=(const Pixel& first, const Pixel& other);
+
+// Stream output
 std::ostream& operator<<(std::ostream& output, const Pixel& pixel);
