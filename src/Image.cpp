@@ -24,6 +24,7 @@ Image::~Image() {
 //    DSimg = new ImageDS(*other.DSimg);     // Deep copy
 //}
 
+
 //void Image::operator=(const Image& other) {
 //    if (this == &other) return;
 //
@@ -137,15 +138,15 @@ Image Image::operator&(const Image& other) const {
 
     Image new_return(minW, minH, Pixel(' '));
 
-   
+
     for (int row = 0; row < minW; row++) {
         for (int col = 0; col < minH; col++) {
 
-            Pixel pixelA = (row < H && col < W) ? (*this)(row, col) : Pixel(' ');        
-            Pixel pixelB = (row < other.H && col < other.W) ? other(row, col) : Pixel(' '); 
+            Pixel pixelA = (row < H && col < W) ? (*this)(row, col) : Pixel(' ');
+            Pixel pixelB = (row < other.H && col < other.W) ? other(row, col) : Pixel(' ');
 
-           
-            new_return(row, col) = pixelA & pixelB; 
+
+            new_return(row, col) = pixelA & pixelB;
         }
     }
 
@@ -170,19 +171,19 @@ void Image::operator&=(const Image& other) {
 //    return result;
 //}
 Image Image::operator*(unsigned int N) const {
-    Image result; 
+    Image result;
     for (unsigned int i = 0; i < N; ++i) {
         result += *this;
     }
     return result;
 }
 
-Image operator*(unsigned int N,const Image& original)  {
-      return original*N;
+Image operator*(unsigned int N, const Image& original) {
+    return original * N;
 }
 
-void operator*=(Image& original , unsigned int N) {
-    original =  original * N;
+void operator*=(Image& original, unsigned int N) {
+    original = original * N;
 }
 
 Image& Image::operator~() {
