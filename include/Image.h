@@ -1,46 +1,39 @@
 #pragma once
 #include "Pixel.h"
-#include "ImageDS.h";
-#include <iosfwd>
+#include "ImageDS.h"
+#include <iostream>
 
 class Image {
-
 public:
-	Image();
-	Image(int width, int hight);
-	Image(const Image& other);
-	Image(int width, int hight, Pixel pixel);
+    Image();                                    
+    Image(int width, int height);               
+    Image(int width, int height, Pixel pixel);  
+    Image(const Image& other);                  
+    ~Image();                                  
 
-	
-	
-	
-	Image operator+(const Image& other)const;
-	void operator=(const Image& other);
-	void operator+=(const Image& other);
-	Image operator|(const Image& other) const;
-	void operator|=(const Image& other);
-	Image operator&(const Image& other) const;
-	void operator&=(const Image& other);
-	Image operator*(unsigned int N) const;
-	Image& operator~();
+    Image operator+(const Image& other) const;  
+    //void operator=(const Image& other);
+    void operator+=(const Image& other);        
+    Image operator|(const Image& other) const;  
+    void operator|=(const Image& other);       
+    Image operator&(const Image& other) const;  
+    void operator&=(const Image& other);        
+    Image operator*(unsigned int N) const;      
+    Image& operator~();                         
 
+    const Pixel operator()(unsigned int X, unsigned int Y) const; 
+    Pixel& operator()(unsigned int X, unsigned int Y);           
 
-	const Pixel operator()(unsigned int X, unsigned int Y) const;
-	Pixel& operator()(unsigned int X, unsigned int Y);
-
-	
-	int getHeight() const;
-	int getWidth() const;
+    int GetHeight() const;                    
+    int GetWidth() const;                     
 
 private:
-	int W;
-	int H;
-	ImageDS DSimg;
-
-	
-	//void allocatePixels(int width, int height, Pixel defaultPixel);
+    int W;             
+    int H;             
+    ImageDS* DSimg;      
 };
 
-bool operator==(const Image& first , const Image& other)  ;
-bool operator!=(const Image& first, const Image& other) ;
-std::ostream& operator<<(std::ostream& output, const Image& temp_image);
+// lso / rso = Left side operator / Right side operator
+bool operator==(const Image& lso, const Image& rso);
+bool operator!=(const Image& lso, const Image& rso);
+std::ostream& operator<<(std::ostream& os, const Image& image);
