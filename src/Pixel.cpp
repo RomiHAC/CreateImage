@@ -5,7 +5,6 @@ const unsigned char Pixel::BLACK = (unsigned char)219;
 const unsigned char Pixel::GRAY = (unsigned char)176;
 const unsigned char Pixel::WHITE = (unsigned char)32;
 
-// Constructor
 Pixel::Pixel(unsigned char pixel) {
     if (pixel != BLACK && pixel != GRAY && pixel != WHITE) {
         throw std::invalid_argument("Invalid pixel value");
@@ -13,48 +12,44 @@ Pixel::Pixel(unsigned char pixel) {
     color = pixel;
 }
 
-// Comparison operators
-bool operator==(const Pixel& first,const Pixel& other)  {
-    return first.getColor() == other.getColor();
-}
-
-bool operator!=(const Pixel& first, const Pixel& other)  {
-    return !(first == other);
-}
-
-// Logical operators
 Pixel Pixel::operator|(const Pixel& other) const {
-    return Pixel((*this).getColor() > other.getColor() ? (*this).getColor() : other.getColor());
+    return Pixel(color > other.color ? color : other.color);
 }
 
 Pixel& Pixel::operator|=(const Pixel& other) {
-    color = (*this).getColor() > other.getColor() ? (*this).getColor() : other.getColor();
+    color = color > other.color ? color : other.color;
     return *this;
 }
 
 Pixel Pixel::operator&(const Pixel& other) const {
-    return Pixel((*this).getColor() < other.getColor() ? (*this).getColor() : other.getColor());
+    return Pixel(color < other.color ? color : other.color);
 }
 
 Pixel& Pixel::operator&=(const Pixel& other) {
-    color = (*this).getColor() < other.getColor() ? (*this).getColor() : other.getColor();
+    color = color < other.color ? color : other.color;
     return *this;
 }
 
-// Stream output
+Pixel& Pixel::operator=(const Pixel& other) {
+    if (this != &other) {
+        color = other.color;
+    }
+    return *this;
+}
+
+unsigned char Pixel::getColor() const { 
+    return color;
+}
+
+bool operator==(const Pixel& first, const Pixel& other) {
+    return first.getColor() == other.getColor();
+}
+
+bool operator!=(const Pixel& first, const Pixel& other) {
+    return !(first == other);
+}
+
 std::ostream& operator<<(std::ostream& os, const Pixel& pixel) {
-    os << pixel.getColor();
+    os << (int)pixel.getColor(); // Cast to int for readable output
     return os;
 }
-
-Pixel& Pixel::operator=(const Pixel& other)  {
-    color = other.getColor();
-    return *this;
-
-}
-char Pixel::getColor() const {
-    return color;
-
-}
-
-
