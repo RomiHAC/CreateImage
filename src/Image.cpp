@@ -177,6 +177,14 @@ Image Image::operator*(unsigned int N) const {
     return result;
 }
 
+Image operator*(unsigned int N,const Image& original)  {
+      return original*N;
+}
+
+void operator*=(Image& original , unsigned int N) {
+    original =  original * N;
+}
+
 Image& Image::operator~() {
     for (int row = 0; row < H; ++row) {
         for (int col = 0; col < W; ++col) {
