@@ -13,22 +13,29 @@ Pixel::Pixel(unsigned char pixel) {
     color = pixel;
 }
 
-Pixel Pixel::operator|(const Pixel& other) const {
-    return Pixel(color > other.color ? color : other.color);
+//Copy contstuctor
+Pixel::Pixel(const Pixel& other) {
+    (*this) = other;
 }
 
-Pixel& Pixel::operator|=(const Pixel& other) {
-    color = color > other.color ? color : other.color;
-    return *this;
+Pixel operator|(const Pixel& original, const Pixel& other) {
+    return Pixel(original.getColor() > other.getColor() ? original.getColor() : other.getColor());
 }
 
-Pixel Pixel::operator&(const Pixel& other) const {
-    return Pixel(color < other.color ? color : other.color);
+
+
+Pixel& operator|=(Pixel& original, const Pixel& other) {
+    original =  original |  other;
+    return original;
 }
 
-Pixel& Pixel::operator&=(const Pixel& other) {
-    color = color < other.color ? color : other.color;
-    return *this;
+Pixel operator&(const Pixel& original, const Pixel& other) {
+    return Pixel(original.getColor() < other.getColor() ? original.getColor() : other.getColor());
+}
+
+Pixel& operator&=(Pixel& original, const Pixel& other) {
+    original = original & other;
+    return original;
 }
 
 Pixel& Pixel::operator=(const Pixel& other) {
@@ -38,7 +45,7 @@ Pixel& Pixel::operator=(const Pixel& other) {
     return *this;
 }
 
-unsigned char Pixel::getColor() const { 
+unsigned char Pixel::getColor() const {
     return color;
 }
 
