@@ -1,4 +1,5 @@
 #include "Pixel.h"
+#include <iostream>
 #include <stdexcept>
 
 const unsigned char Pixel::BLACK = (unsigned char)219;
@@ -53,3 +54,7 @@ std::ostream& operator<<(std::ostream& os, const Pixel& pixel) {
     os << (int)pixel.getColor(); // Cast to int for readable output
     return os;
 }
+//std::ostream& operator<<(std::ostream& os, const Pixel& pixel) {
+//    os << static_cast<int>(pixel.getColor()); // Assuming getColor() returns a color value
+//    return os;
+//}
