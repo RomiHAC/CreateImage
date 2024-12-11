@@ -1,228 +1,195 @@
 #include "Image.h"
 #include <algorithm>
 
-Image::Image() : W(0), H(0), DSimg(nullptr) {}
+// Default Constructor
+Image::Image() : DSimg(new ImageDS(0,0)) {}
 
-Image::Image(int width, int height) : W(width), H(height), DSimg(new ImageDS(width, height)) {}
+// Constructor with height and width
+Image::Image(int height, int width) : DSimg(new ImageDS(height, width)) {}
 
-Image::Image(int width, int height, Pixel pixel)
-    : W(width), H(height), DSimg(new ImageDS(width, height, pixel)) {}
+// Constructor with height, width, and default pixel value
+Image::Image(int height, int width, Pixel pixel)
+    : DSimg(new ImageDS(height, width, pixel)) {}
 
-Image::Image(const Image& other) : W(other.W), H(other.H), DSimg(new ImageDS(*other.DSimg)) {}
+// Copy Constructor
+Image::Image(const Image& other) : DSimg(new ImageDS(*other.DSimg)) {}
 
+// Destructor
 Image::~Image() {
     delete DSimg;
 }
 
-//// Assignment Operator
-//void Image::operator=(const Image& other) {
-//    if (this == &other) return;
+ //Assignment Operator
+//Image& Image::operator=(const Image& other) {
+//    if (this == &other) return *this; // Self-assignment check
 //
-//    delete DSimg;                          // Free existing memory
-//    W = other.W;
+//    delete DSimg; // Free existing memory
 //    H = other.H;
-//    DSimg = new ImageDS(*other.DSimg);     // Deep copy
+//    W = other.W;
+//    DSimg = new ImageDS(*other.DSimg); // Deep copy
+//
+//    return *this;
 //}
 
-
-//void Image::operator=(const Image& other) {
-//    if (this == &other) return;
-//
-//
-//
-//    W = other.getWidth();
-//    H = other.getHeight();
-//    Image temp(W, H, ' ');
-//
-//    for (int row = 0; row < (*this).getHeight(); ++row) {
-//        for (int col = 0; col < (*this).getWidth(); ++col) {
-//            temp(row, col) = other(row, col);
-//        }
-//    }
-//    //(*this)(temp);
-//
-//}
-
+// Access pixel (const)
 const Pixel Image::operator()(unsigned int X, unsigned int Y) const {
     return DSimg->getPixel(X, Y);
 }
 
+// Access pixel (non-const)
 Pixel& Image::operator()(unsigned int X, unsigned int Y) {
     return DSimg->getPixel(X, Y);
 }
 
-
+// Getters for dimensions
 int Image::GetHeight() const {
-    return H;
+    return DSimg->getHeight();
 }
 
 int Image::GetWidth() const {
-    return W;
+    return DSimg->getWidth();
 }
 
 
-Image Image::operator+(const Image& other) const {
-    int newHeight = std::max(H, other.H);
-    int newWidth = W + other.W;
 
-    Image result(newWidth, newHeight, Pixel(' '));
-    for (int row = 0; row < H; ++row) {
-        for (int col = 0; col < W; ++col) {
+// Addition operator
+Image Image::operator+(const Image& other) const {
+    int newHeight = std::max(DSimg->getHeight(), other.DSimg->getHeight());
+    int newWidth = DSimg->getWidth() + other.DSimg->getWidth();
+
+    Image result(newHeight, newWidth, Pixel(' '));
+
+    // Copy this image's pixels
+    for (int row = 0; row < DSimg->getHeight(); ++row) {
+        for (int col = 0; col < DSimg->getWidth(); ++col) {
             result(row, col) = (*this)(row, col);
         }
     }
-    for (int row = 0; row < other.H; ++row) {
-        for (int col = 0; col < other.W; ++col) {
-            result(row, col + W) = other(row, col);
+
+    // Copy the other image's pixels
+    for (int row = 0; row < other.DSimg->getHeight(); ++row) {
+        for (int col = 0; col < other.DSimg->getWidth(); ++col) {
+            result(row, col + DSimg->getWidth()) = other(row, col);
         }
     }
 
     return result;
 }
 
-
-void Image::operator+=(const Image& other) {
+// Compound addition operator
+Image Image::operator+=(const Image& other) {
     *this = *this + other;
+    return *this;
 }
 
-
-
-
-//Image Image::operator|(const Image& other) const {
-//
-//    int maxW = std::max(W, other.W);
-//    int maxH = std::max(H, other.H);
-//
-//
-//    Image new_return(maxW, maxH, Pixel(' '));
-//
-//    // Fill the resulting image
-//    for (int row = 0; row < maxH; row++) {
-//        for (int col = 0; col < maxW; col++) {
-//
-//
-//            Pixel pixelA = (row < H && col < W) ? (*this)(row, col) : Pixel(' ');        // Get pixel from current image or default
-//            Pixel pixelB = (row < other.H && col < other.W) ? other(row, col) : Pixel(' '); // Get pixel from other image or default
-//
-//            //Define the union logic for combining two pixels
-//            new_return(row, col) = pixelA | pixelB; // Assuming `Pixel` supports the `|` operator
-//        }
-//    }
-//
-//    return new_return;
-//}
-
-
+// Union operator
 Image Image::operator|(const Image& other) const {
-    Image result(std::max(W, other.W), std::max(H, other.H), Pixel(' '));
+    int newWidth = std::max(DSimg->getWidth(), other.DSimg->getWidth());
+    int newHeight = std::max(DSimg->getHeight(), other.DSimg->getHeight());
+
+    Image result(newHeight, newWidth, Pixel(' '));
+
     for (int row = 0; row < result.GetHeight(); ++row) {
         for (int col = 0; col < result.GetWidth(); ++col) {
-            Pixel pixel1 = (row < H && col < W) ? (*this)(row, col) : Pixel(' ');
-            Pixel pixel2 = (row < other.H && col < other.W) ? other(row, col) : Pixel(' ');
-            result(row, col) = (pixel1 == Pixel::WHITE || pixel2 == Pixel::WHITE) ? Pixel::WHITE : Pixel::BLACK;
+            Pixel pixel1 = (row < DSimg->getHeight() && col < DSimg->getWidth()) ? (*this)(row, col) : Pixel(' ');
+            Pixel pixel2 = (row < other.DSimg->getHeight() && col < other.DSimg->getWidth()) ? other(row, col) : Pixel(' ');
+            result(row, col) = pixel1 | pixel2; // Assuming Pixel supports the | operator
         }
     }
+
     return result;
 }
 
-
-void Image::operator|=(const Image& other) {
+// Compound union operator
+Image Image::operator|=(const Image& other) {
     *this = *this | other;
+    return *this;
 }
 
-
+// Intersection operator
 Image Image::operator&(const Image& other) const {
-    int minW = std::min(W, other.W);
-    int minH = std::min(H, other.H);
+    int minWidth = std::min(DSimg->getWidth(), other.DSimg->getWidth());
+    int minHeight = std::min(DSimg->getHeight(), other.DSimg->getHeight());
 
+    Image result(minHeight, minWidth, Pixel(' '));
 
-    Image new_return(minW, minH, Pixel(' '));
-
-
-    for (int row = 0; row < minW; row++) {
-        for (int col = 0; col < minH; col++) {
-
-            Pixel pixelA = (row < H && col < W) ? (*this)(row, col) : Pixel(' ');
-            Pixel pixelB = (row < other.H && col < other.W) ? other(row, col) : Pixel(' ');
-
-
-            new_return(row, col) = pixelA & pixelB;
+    for (int row = 0; row < minHeight; ++row) {
+        for (int col = 0; col < minWidth; ++col) {
+            Pixel pixel1 = (*this)(row, col);
+            Pixel pixel2 = other(row, col);
+            result(row, col) = (pixel1 == Pixel::WHITE && pixel2 == Pixel::WHITE) ? Pixel::WHITE : Pixel::BLACK;
         }
     }
 
-    return new_return;
-
-}
-
-void Image::operator&=(const Image& other) {
-    *this = *this & other;
-}
-
-// Repeat the image N times
-//Image Image::operator*(unsigned int N) const {
-//    Image result(W * N, H, Pixel(' '));
-//    for (unsigned int n = 0; n < N; ++n) {
-//        for (int row = 0; row < H; ++row) {
-//            for (int col = 0; col < W; ++col) {
-//                result(row, col + n * W) = (*this)(row, col);
-//            }
-//        }
-//    }
-//    return result;
-//}
-Image Image::operator*(unsigned int N) const {
-    Image result;
-    for (unsigned int i = 0; i < N; ++i) {
-        result += *this;
-    }
     return result;
 }
 
-Image operator*(unsigned int N, const Image& original) {
-    return original * N;
+// Compound intersection operator
+Image Image::operator&=(const Image& other) {
+    *this = *this & other;
+    return *this;
 }
 
-void operator*=(Image& original, unsigned int N) {
-    original = original * N;
+// Repeat operator
+Image Image::operator*(unsigned int N) const {
+    int newWidth = DSimg->getWidth() * N;
+    Image result(DSimg->getHeight(), newWidth, Pixel(' '));
+
+    for (unsigned int n = 0; n < N; ++n) {
+        for (int row = 0; row < DSimg->getHeight(); ++row) {
+            for (int col = 0; col < DSimg->getWidth(); ++col) {
+                result(row, col + n * DSimg->getWidth()) = (*this)(row, col);
+            }
+        }
+    }
+
+    return result;
 }
 
+// Negation operator
 Image& Image::operator~() {
-    for (int row = 0; row < H; ++row) {
-        for (int col = 0; col < W; ++col) {
+    for (int row = 0; row < DSimg->getHeight(); ++row) {
+        for (int col = 0; col < DSimg->getWidth(); ++col) {
             Pixel& p = (*this)(row, col);
             p = (p == Pixel::WHITE) ? Pixel::BLACK : Pixel::WHITE;
         }
     }
+
     return *this;
 }
 
-bool operator==(const Image& lso, const Image& rso) {
-    if (lso.GetHeight() != rso.GetHeight() || lso.GetWidth() != rso.GetWidth()) {
+// Equality operator
+bool operator==(const Image& lhs, const Image& rhs) {
+    if (lhs.GetHeight() != rhs.GetHeight() || lhs.GetWidth() != rhs.GetWidth()) {
         return false;
     }
-    for (int row = 0; row < lso.GetHeight(); ++row) {
-        for (int col = 0; col < lso.GetWidth(); ++col) {
-            if (lso(row, col) != rso(row, col)) {
+
+    for (int row = 0; row < lhs.GetHeight(); ++row) {
+        for (int col = 0; col < lhs.GetWidth(); ++col) {
+            if (lhs(row, col) != rhs(row, col)) {
                 return false;
             }
         }
     }
+
     return true;
 }
 
-bool operator!=(const Image& lso, const Image& rso) {
-    return !(lso == rso);
+// Inequality operator
+bool operator!=(const Image& lhs, const Image& rhs) {
+    return !(lhs == rhs);
 }
 
-
+// Output stream operator
 std::ostream& operator<<(std::ostream& os, const Image& image) {
-
     os << "Image (" << image.GetWidth() << "x" << image.GetHeight() << "):" << std::endl;
+
     for (int row = 0; row < image.GetHeight(); ++row) {
         for (int col = 0; col < image.GetWidth(); ++col) {
             os << image(row, col);
         }
         os << std::endl;
     }
+
     return os;
 }
