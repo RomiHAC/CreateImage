@@ -2,7 +2,7 @@
 #include <algorithm>
 
 // Default Constructor
-Image::Image() : DSimg(new ImageDS(0,0)) {}
+Image::Image() : DSimg(new ImageDS(0, 0)) {}
 
 // Constructor with height and width
 Image::Image(int height, int width) : DSimg(new ImageDS(height, width)) {}
@@ -19,7 +19,7 @@ Image::~Image() {
     delete DSimg;
 }
 
- //Assignment Operator
+//Assignment Operator
 //Image& Image::operator=(const Image& other) {
 //    if (this == &other) return *this; // Self-assignment check
 //
@@ -77,9 +77,9 @@ Image Image::operator+(const Image& other) const {
 }
 
 // Compound addition operator
-Image Image::operator+=(const Image& other) {
-    *this = *this + other;
-    return *this;
+Image& operator+=(Image& original, const Image& other) {
+    original = original + other;
+    return original;
 }
 
 // Union operator
@@ -101,9 +101,9 @@ Image Image::operator|(const Image& other) const {
 }
 
 // Compound union operator
-Image Image::operator|=(const Image& other) {
-    *this = *this | other;
-    return *this;
+Image& operator|=(Image &original ,const Image& other) {
+    original = original | other;
+    return original;
 }
 
 // Intersection operator
@@ -125,9 +125,19 @@ Image Image::operator&(const Image& other) const {
 }
 
 // Compound intersection operator
-Image Image::operator&=(const Image& other) {
-    *this = *this & other;
-    return *this;
+Image& operator&=(Image& original, const Image& other) {
+    original = original & other;
+    return original;
+}
+
+Image operator*(unsigned int N, const Image& original)
+{
+    return original * N;
+}
+
+Image& operator*=(Image& original, unsigned int N) {
+    original = original * N;
+    return original;
 }
 
 // Repeat operator
@@ -159,14 +169,14 @@ Image& Image::operator~() {
 }
 
 // Equality operator
-bool operator==(const Image& lhs, const Image& rhs) {
-    if (lhs.GetHeight() != rhs.GetHeight() || lhs.GetWidth() != rhs.GetWidth()) {
+bool Image::operator==(const Image& other) const {
+    if (DSimg->getHeight() != other.DSimg->getHeight() || DSimg->getWidth() != other.DSimg->getWidth()) {
         return false;
     }
 
-    for (int row = 0; row < lhs.GetHeight(); ++row) {
-        for (int col = 0; col < lhs.GetWidth(); ++col) {
-            if (lhs(row, col) != rhs(row, col)) {
+    for (int row = 0; row < DSimg->getHeight(); ++row) {
+        for (int col = 0; col < DSimg->getWidth(); ++col) {
+            if ((*this)(row, col) != other(row, col)) {
                 return false;
             }
         }
@@ -181,11 +191,11 @@ bool operator!=(const Image& lhs, const Image& rhs) {
 }
 
 // Output stream operator
-std::ostream& operator<<(std::ostream& os, const Image& image) {
-    os << "Image (" << image.GetWidth() << "x" << image.GetHeight() << "):" << std::endl;
+std::ostream& operator<<(std::ostream& os, const  Image& image) {
+   // os << "Image (" << image.DSimg->getWidth() << "x" << image.DSimg->getHeight() << "):" << std::endl;
 
-    for (int row = 0; row < image.GetHeight(); ++row) {
-        for (int col = 0; col < image.GetWidth(); ++col) {
+    for (int row = 0; row < image.DSimg->getHeight(); ++row) {
+        for (int col = 0; col < image.DSimg->getWidth(); ++col) {
             os << image(row, col);
         }
         os << std::endl;
