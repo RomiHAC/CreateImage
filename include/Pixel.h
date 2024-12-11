@@ -1,5 +1,5 @@
 #pragma once
-#include <iostream>
+#include <iosfwd>
 
 class Pixel {
 private:
@@ -22,6 +22,7 @@ public:
 
     Pixel& operator=(const Pixel& other);
 
+    friend std::ostream& operator<<(std::ostream& os, const Pixel& pixel);
     unsigned char getColor() const; // Updated to return unsigned char
 };
 
@@ -30,4 +31,4 @@ bool operator==(const Pixel& first, const Pixel& other);
 bool operator!=(const Pixel& first, const Pixel& other);
 
 // Stream output
-std::ostream& operator<<(std::ostream& output, const Pixel& pixel);
+//std::ostream& operator<<(std::ostream& output, const Pixel& pixel);
