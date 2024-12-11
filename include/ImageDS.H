@@ -4,8 +4,8 @@
 class ImageDS {
 public:
     ImageDS();                                  
-    ImageDS(int width, int height);            
-    ImageDS(int width, int height, Pixel pixel); 
+    ImageDS(int height, int width);
+    ImageDS(int height, int width, Pixel pixel);
     ImageDS(const ImageDS& other);           
     ~ImageDS();                                
 
@@ -15,8 +15,10 @@ public:
     Pixel& getPixel(int x, int y);             
     void setPixel(int x, int y, const Pixel& pixel); 
 
-    int GetWidth() const;                     
-    int GetHeight() const;                    
+    int getWidth() const;                     
+    int getHeight() const;        
+    void setHeight(int H);
+    void setWidth(int W);
 
 private:
     int width;                              
