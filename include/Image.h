@@ -12,18 +12,26 @@ public:
     ~Image();                                  // Destructor
 
     //Image& operator=(const Image& other);      // Assignment Operator
+    bool operator==(const Image& other) const ;
 
     Image operator+(const Image& other) const; // Concatenation operator
-    Image operator+=(const Image& other);       // Compound concatenation operator
+      
+
+
     Image operator|(const Image& other) const; // Union operator
-    Image operator|=(const Image& other);       // Compound union operator
+    
+
     Image operator&(const Image& other) const; // Intersection operator
-    Image operator&=(const Image& other);       // Compound intersection operator
+   
+
     Image operator*(unsigned int N) const;     // Repeat operator
+
     Image& operator~();                        // Negation operator
 
     const Pixel operator()(unsigned int X, unsigned int Y) const; // Access pixel (const)
     Pixel& operator()(unsigned int X, unsigned int Y);            // Access pixel (non-const)
+
+    friend std::ostream& operator<<(std::ostream& os, const  Image& image);
 
     int GetHeight() const;                     // Get image height
     int GetWidth() const;                      // Get image width
@@ -35,8 +43,22 @@ private:
 };
 
 // Comparison operators
-bool operator==(const Image& lhs, const Image& rhs);
+
+
+//bool operator==(const Image& lhs, const Image& rhs);
 bool operator!=(const Image& lhs, const Image& rhs);
 
+Image& operator+=(Image &original,const Image& other); // Compound concatenation operator
+
+Image& operator|=(Image& original, const Image& other); //Compound Union operator
+
+Image& operator&=(Image &original,const Image& other);       // Compound intersection operator
+
+Image operator*(unsigned int N, const Image& original);// Repeat operator
+
+Image& operator*=( Image& original ,unsigned int N);// Compound Repeat operator
+
+
+
 // Output stream operator
-std::ostream& operator<<(std::ostream& os, const Image& image);
+//std::ostream& operator<<(std::ostream& os, const Image& image);
