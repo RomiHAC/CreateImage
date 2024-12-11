@@ -90,13 +90,13 @@ void ImageDS::setHeight(int H) {
 }
 
 void ImageDS::setWidth(int W) {
-     width = W;
+    width = W;
 }
 // Allocate memory for pixels
-void ImageDS::allocatePixels(int width, int height) {
-    pixels = new Pixel * [height];
-    for (int i = 0; i < height; ++i) {
-        pixels[i] = new Pixel[width];
+void ImageDS::allocatePixels(int W, int H) {
+    pixels = new Pixel * [H];
+    for (int i = 0; i < H; ++i) {
+        pixels[i] = new Pixel[W];
     }
 }
 
