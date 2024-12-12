@@ -1,6 +1,7 @@
 #include "Image.h"
 #include <algorithm>
 
+
 // Default Constructor
 Image::Image() : DSimg(new ImageDS(0, 0)) {}
 
@@ -117,7 +118,7 @@ Image Image::operator&(const Image& other) const {
         for (int col = 0; col < minWidth; ++col) {
             Pixel pixel1 = (*this)(row, col);
             Pixel pixel2 = other(row, col);
-            result(row, col) = (pixel1 == Pixel::WHITE && pixel2 == Pixel::WHITE) ? Pixel::WHITE : Pixel::BLACK;
+            result(row, col) = (pixel1 == WHITE && pixel2 == WHITE) ? WHITE : BLACK;
         }
     }
 
@@ -161,7 +162,7 @@ Image& Image::operator~() {
     for (int row = 0; row < DSimg->getHeight(); ++row) {
         for (int col = 0; col < DSimg->getWidth(); ++col) {
             Pixel& p = (*this)(row, col);
-            p = (p == Pixel::WHITE) ? Pixel::BLACK : Pixel::WHITE;
+            p = (p == WHITE) ? BLACK : WHITE;
         }
     }
 
@@ -191,15 +192,12 @@ bool operator!=(const Image& lhs, const Image& rhs) {
 }
 
 // Output stream operator
-std::ostream& operator<<(std::ostream& os, const  Image& image) {
-   // os << "Image (" << image.DSimg->getWidth() << "x" << image.DSimg->getHeight() << "):" << std::endl;
-
+std::ostream& operator<<(std::ostream& os, const Image& image) {
     for (int row = 0; row < image.DSimg->getHeight(); ++row) {
         for (int col = 0; col < image.DSimg->getWidth(); ++col) {
             os << image(row, col);
         }
         os << std::endl;
     }
-
     return os;
 }
