@@ -31,7 +31,7 @@ public:
     const Pixel operator()(unsigned int X, unsigned int Y) const; // Access pixel (const)
     Pixel& operator()(unsigned int X, unsigned int Y);            // Access pixel (non-const)
 
-    friend std::ostream& operator<<(std::ostream& os, const  Image& image);
+    //friend std::ostream& operator<<(std::ostream& os, const  Image& image);
 
     int GetHeight() const;                     // Get image height
     int GetWidth() const;                      // Get image width
@@ -61,4 +61,4 @@ Image& operator*=( Image& original ,unsigned int N);// Compound Repeat operator
 
 
 // Output stream operator
-//std::ostream& operator<<(std::ostream& os, const Image& image);
+std::ostream& operator<<(std::ostream& os, const Image& image);
