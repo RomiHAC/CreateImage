@@ -2,9 +2,6 @@
 #include <iostream>
 #include <stdexcept>
 
-const unsigned char Pixel::BLACK = (unsigned char)219;
-const unsigned char Pixel::GRAY = (unsigned char)176;
-const unsigned char Pixel::WHITE = (unsigned char)32;
 
 Pixel::Pixel(unsigned char pixel) {
     if (pixel != BLACK && pixel != GRAY && pixel != WHITE) {
@@ -58,9 +55,10 @@ bool operator!=(const Pixel& first, const Pixel& other) {
 }
 
 std::ostream& operator<<(std::ostream& os, const Pixel& pixel) {
-    os << (int)pixel.getColor(); // Cast to int for readable output
+    os << pixel.getColor(); // Print the character directly
     return os;
 }
+
 //std::ostream& operator<<(std::ostream& os, const Pixel& pixel) {
 //    os << static_cast<int>(pixel.getColor()); // Assuming getColor() returns a color value
 //    return os;
