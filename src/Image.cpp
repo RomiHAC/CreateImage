@@ -193,8 +193,8 @@ bool operator!=(const Image& lhs, const Image& rhs) {
 
 // Output stream operator
 std::ostream& operator<<(std::ostream& os, const Image& image) {
-    for (int row = 0; row < image.DSimg->getHeight(); ++row) {
-        for (int col = 0; col < image.DSimg->getWidth(); ++col) {
+    for (int row = 0; row < image.GetHeight(); ++row) {
+        for (int col = 0; col < image.GetWidth(); ++col) {
             os << image(row, col);
         }
         os << std::endl;
