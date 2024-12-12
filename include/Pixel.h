@@ -1,14 +1,15 @@
 #pragma once
 #include <iosfwd>
+const unsigned char BLACK = (unsigned char)219;
+const unsigned char GRAY = (unsigned char)176;
+const unsigned char WHITE = (unsigned char)32;
 
 class Pixel {
 private:
     unsigned char color;
 
 public:
-    static const unsigned char BLACK;
-    static const unsigned char GRAY;
-    static const unsigned char WHITE;
+   
 
     // Constructor
     Pixel(unsigned char pixel = WHITE);
@@ -22,7 +23,7 @@ public:
 
     Pixel& operator=(const Pixel& other);
 
-    friend std::ostream& operator<<(std::ostream& os, const Pixel& pixel);
+    //friend std::ostream& operator<<(std::ostream& os, const Pixel& pixel);
 
     unsigned char getColor() const; // Updated to return unsigned char
 };
@@ -32,7 +33,8 @@ bool operator==(const Pixel& first, const Pixel& other);
 bool operator!=(const Pixel& first, const Pixel& other);
 
 // Stream output
-//std::ostream& operator<<(std::ostream& output, const Pixel& pixel);
+std::ostream& operator<<(std::ostream& output, const Pixel& pixel);
+
 Pixel operator|(const Pixel& original, const Pixel& other);
 Pixel& operator|=(Pixel& original ,const Pixel& other);
 
