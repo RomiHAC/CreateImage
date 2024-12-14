@@ -21,16 +21,16 @@ Image::~Image() {
 }
 
 //Assignment Operator
-//Image& Image::operator=(const Image& other) {
-//    if (this == &other) return *this; // Self-assignment check
-//
-//    delete DSimg; // Free existing memory
-//    H = other.H;
-//    W = other.W;
-//    DSimg = new ImageDS(*other.DSimg); // Deep copy
-//
-//    return *this;
-//}
+Image& Image::operator=(const Image& other) {
+    if (this == &other) return *this; // Self-assignment check
+
+    delete DSimg; // Free existing memory
+    H = other.H;
+    W = other.W;
+    DSimg = new ImageDS(*other.DSimg); // Deep copy
+
+    return *this;
+}
 
 // Access pixel (const)
 const Pixel Image::operator()(unsigned int X, unsigned int Y) const {
@@ -102,7 +102,7 @@ Image Image::operator|(const Image& other) const {
 }
 
 // Compound union operator
-Image& operator|=(Image &original ,const Image& other) {
+Image& operator|=(Image& original, const Image& other) {
     original = original | other;
     return original;
 }
