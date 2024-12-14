@@ -11,18 +11,18 @@ public:
     Image(const Image& other);                 // Copy Constructor
     ~Image();                                  // Destructor
 
-    //Image& operator=(const Image& other);      // Assignment Operator
-    bool operator==(const Image& other) const ;
+    Image& operator=(const Image& other);      // Assignment Operator
+    bool operator==(const Image& other) const;
 
     Image operator+(const Image& other) const; // Concatenation operator
-      
+
 
 
     Image operator|(const Image& other) const; // Union operator
-    
+
 
     Image operator&(const Image& other) const; // Intersection operator
-   
+
 
     Image operator*(unsigned int N) const;     // Repeat operator
 
@@ -37,8 +37,8 @@ public:
     int GetWidth() const;                      // Get image width
 
 private:
-    //int W;             // Width of the image
-    //int H;             // Height of the image
+    int W;             // Width of the image
+    int H;             // Height of the image
     ImageDS* DSimg;    // Pointer to the underlying data structure
 };
 
@@ -48,15 +48,15 @@ private:
 //bool operator==(const Image& lhs, const Image& rhs);
 bool operator!=(const Image& lhs, const Image& rhs);
 
-Image& operator+=(Image &original,const Image& other); // Compound concatenation operator
+Image& operator+=(Image& original, const Image& other); // Compound concatenation operator
 
 Image& operator|=(Image& original, const Image& other); //Compound Union operator
 
-Image& operator&=(Image &original,const Image& other);       // Compound intersection operator
+Image& operator&=(Image& original, const Image& other);       // Compound intersection operator
 
 Image operator*(unsigned int N, const Image& original);// Repeat operator
 
-Image& operator*=( Image& original ,unsigned int N);// Compound Repeat operator
+Image& operator*=(Image& original, unsigned int N);// Compound Repeat operator
 
 
 
