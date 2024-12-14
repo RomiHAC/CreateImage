@@ -35,22 +35,22 @@ ImageDS::~ImageDS() {
 }
 
 // Assignment Operator
-ImageDS& ImageDS::operator=(const ImageDS& other) {
-    if (this == &other) return *this;
-
-    deallocatePixels(); // Free existing memory
-    width = other.width;
-    height = other.height;
-    allocatePixels(width, height);
-
-    for (int i = 0; i < height; ++i) {
-        for (int j = 0; j < width; ++j) {
-            pixels[i][j] = other.pixels[i][j];
-        }
-    }
-
-    return *this;
-}
+//ImageDS& ImageDS::operator=(const ImageDS& other) {
+//    if (this == &other) return *this;
+//
+//    deallocatePixels(); // Free existing memory
+//    width = other.width;
+//    height = other.height;
+//    allocatePixels(width, height);
+//
+//    for (int i = 0; i < height; ++i) {
+//        for (int j = 0; j < width; ++j) {
+//            pixels[i][j] = other.pixels[i][j];
+//        }
+//    }
+//
+//    return *this;
+//}
 
 // Get pixel (const)
 Pixel ImageDS::getPixel(int x, int y) const {
