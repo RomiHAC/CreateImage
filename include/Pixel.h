@@ -9,17 +9,17 @@ private:
     unsigned char color;
 
 public:
-   
+
 
     // Constructor
     Pixel(unsigned char pixel = WHITE);
     Pixel(const Pixel& other);
     // Logical operators
     //Pixel operator|(const Pixel& other) const;
-    
+
 
     //Pixel operator&(const Pixel& other) const;
-   
+
 
     Pixel& operator=(const Pixel& other);
 
@@ -36,8 +36,7 @@ bool operator!=(const Pixel& first, const Pixel& other);
 std::ostream& operator<<(std::ostream& output, const Pixel& pixel);
 
 Pixel operator|(const Pixel& original, const Pixel& other);
-Pixel& operator|=(Pixel& original ,const Pixel& other);
+Pixel& operator|=(Pixel& original, const Pixel& other);
 
 Pixel operator&(const Pixel& original, const Pixel& other);
-Pixel& operator&=(Pixel& original ,const Pixel& other);
-
+Pixel& operator&=(Pixel& original, const Pixel& other);
