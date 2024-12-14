@@ -22,7 +22,7 @@ Pixel operator|(const Pixel& original, const Pixel& other) {
 
 
 Pixel& operator|=(Pixel& original, const Pixel& other) {
-    original =  original |  other;
+    original = original | other;
     return original;
 }
 
