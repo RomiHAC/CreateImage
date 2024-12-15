@@ -9,7 +9,7 @@ public:
     ImageDS(const ImageDS& other);
     ~ImageDS();
 
-  //  ImageDS& operator=(const ImageDS& other);
+    //  ImageDS& operator=(const ImageDS& other);
 
     Pixel getPixel(int x, int y) const;
     Pixel& getPixel(int x, int y);
