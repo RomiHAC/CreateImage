@@ -25,12 +25,25 @@ Image::~Image() {
 //    if (this == &other) return *this; // Self-assignment check
 //
 //    delete DSimg; // Free existing memory
-//    H = other.H;
+//    //DSimg->setHeight(other.GetHeight());
+//    //DSimg->setWidth(other.GetWidth());
+//   H = other.H;
 //    W = other.W;
 //    DSimg = new ImageDS(*other.DSimg); // Deep copy
 //
 //    return *this;
 //}
+Image& Image::operator=(const Image& other) {
+    if (this == &other) return *this; // Self-assignment check
+
+    // Free existing memory
+    delete DSimg;
+
+    // Deep copy the DSimg object from the other Image
+    DSimg = new ImageDS(*other.DSimg); // Assuming ImageDS has a proper copy constructor
+
+    return *this;
+}
 
 // Access pixel (const)
 const Pixel Image::operator()(unsigned int X, unsigned int Y) const {
@@ -86,7 +99,7 @@ Image& operator+=(Image& original, const Image& other) {
 // Union operator
 Image operator|(const Image& original, const Image& other) {
     int newWidth = std::max(original.GetHeight(), other.GetHeight());
-    int newHeight = std::max(original.GetWidth(),other.GetWidth());
+    int newHeight = std::max(original.GetWidth(), other.GetWidth());
 
     Image result(newHeight, newWidth, Pixel(' '));
 
@@ -102,13 +115,13 @@ Image operator|(const Image& original, const Image& other) {
 }
 
 // Compound union operator
-Image& operator|=(Image &original ,const Image& other) {
+Image& operator|=(Image& original, const Image& other) {
     original = original | other;
     return original;
 }
 
 // Intersection operator
-Image operator&(const Image& original, const Image& other)  {
+Image operator&(const Image& original, const Image& other) {
     int minWidth = std::min(original.GetWidth(), other.GetWidth());
     int minHeight = std::min(original.GetHeight(), other.GetHeight());
 
@@ -142,7 +155,7 @@ Image& operator*=(Image& original, unsigned int N) {
 }
 
 // Repeat operator
-Image operator*(const Image& original, unsigned int N)  {
+Image operator*(const Image& original, unsigned int N) {
     int newWidth = original.GetWidth() * N;
     Image result(original.GetHeight(), newWidth, Pixel(' '));
 
@@ -170,7 +183,7 @@ Image& operator~(Image& original) {
 }
 
 // Equality operator
-bool operator==(const Image& lhs, const Image& rhs)  {
+bool operator==(const Image& lhs, const Image& rhs) {
     if (lhs.GetHeight() != rhs.GetHeight() || lhs.GetWidth() != rhs.GetWidth()) {
         return false;
     }
