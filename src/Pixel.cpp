@@ -2,6 +2,7 @@
 #include <iostream>
 #include <stdexcept>
 
+
 Pixel::Pixel(unsigned char pixel) {
     if (pixel != BLACK && pixel != GRAY && pixel != WHITE) {
         throw std::invalid_argument("Invalid pixel value");
