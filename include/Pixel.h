@@ -9,9 +9,7 @@ private:
     unsigned char color;
 
 public:
-    Pixel(unsigned char pixel = WHITE);
-    Pixel(unsigned char pixel);
-
+    Pixel(unsigned char pixel = ' ');
     Pixel& operator=(const Pixel& other);
     unsigned char getColor() const; 
 };
