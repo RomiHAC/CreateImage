@@ -1,72 +1,24 @@
 #include "Image.h"
 #include <algorithm>
 
-
-// Default Constructor
-Image::Image() : DSimg(new ImageDS(0, 0)) {}
-
-// Constructor with height and width
-Image::Image(int height, int width) : DSimg(new ImageDS(height, width)) {}
-
-// Constructor with height, width, and default pixel value
+Image::Image() : DSimg(0, 0) {}
+Image::Image(int height, int width) : DSimg(height, width) {}
 Image::Image(int height, int width, Pixel pixel)
-    : DSimg(new ImageDS(height, width, pixel)) {}
+    : DSimg(height, width, pixel) {}
 
-// Copy Constructor
-Image::Image(const Image& other) : DSimg(new ImageDS(*other.DSimg)) {}
-
-// Destructor
-Image::~Image() {
-    delete DSimg;
-}
-
-//Assignment Operator
-//Image& Image::operator=(const Image& other) {
-//    if (this == &other) return *this; // Self-assignment check
-//
-//    delete DSimg; // Free existing memory
-//    //DSimg->setHeight(other.GetHeight());
-//    //DSimg->setWidth(other.GetWidth());
-//   H = other.H;
-//    W = other.W;
-//    DSimg = new ImageDS(*other.DSimg); // Deep copy
-//
-//    return *this;
-//}
-Image& Image::operator=(const Image& other) {
-    if (this == &other) return *this; // Self-assignment check
-
-    // Free existing memory
-    delete DSimg;
-
-    // Deep copy the DSimg object from the other Image
-    DSimg = new ImageDS(*other.DSimg); // Assuming ImageDS has a proper copy constructor
-
-    return *this;
-}
-
-// Access pixel (const)
 const Pixel Image::operator()(unsigned int X, unsigned int Y) const {
-    return DSimg->getPixel(X, Y);
+    return DSimg.getPixel(X, Y);
 }
-
-// Access pixel (non-const)
 Pixel& Image::operator()(unsigned int X, unsigned int Y) {
-    return DSimg->getPixel(X, Y);
+    return DSimg.getPixel(X, Y);
 }
-
-// Getters for dimensions
 int Image::GetHeight() const {
-    return DSimg->getHeight();
+    return DSimg.getHeight();
 }
-
 int Image::GetWidth() const {
-    return DSimg->getWidth();
+    return DSimg.getWidth();
 }
 
-
-
-// Addition operator
 Image operator+(const Image& original, const Image& other) {
     int newHeight = std::max(original.GetHeight(), other.GetHeight());
     int newWidth = original.GetWidth() + other.GetWidth();
@@ -90,13 +42,11 @@ Image operator+(const Image& original, const Image& other) {
     return result;
 }
 
-// Compound addition operator
 Image& operator+=(Image& original, const Image& other) {
     original = original + other;
     return original;
 }
 
-// Union operator
 Image operator|(const Image& original, const Image& other) {
     int newWidth = std::max(original.GetHeight(), other.GetHeight());
     int newHeight = std::max(original.GetWidth(), other.GetWidth());
@@ -114,13 +64,11 @@ Image operator|(const Image& original, const Image& other) {
     return result;
 }
 
-// Compound union operator
 Image& operator|=(Image& original, const Image& other) {
     original = original | other;
     return original;
 }
 
-// Intersection operator
 Image operator&(const Image& original, const Image& other) {
     int minWidth = std::min(original.GetWidth(), other.GetWidth());
     int minHeight = std::min(original.GetHeight(), other.GetHeight());
@@ -138,7 +86,6 @@ Image operator&(const Image& original, const Image& other) {
     return result;
 }
 
-// Compound intersection operator
 Image& operator&=(Image& original, const Image& other) {
     original = original & other;
     return original;
@@ -154,7 +101,6 @@ Image& operator*=(Image& original, unsigned int N) {
     return original;
 }
 
-// Repeat operator
 Image operator*(const Image& original, unsigned int N) {
     int newWidth = original.GetWidth() * N;
     Image result(original.GetHeight(), newWidth, Pixel(' '));
@@ -170,7 +116,6 @@ Image operator*(const Image& original, unsigned int N) {
     return result;
 }
 
-// Negation operator
 Image& operator~(Image& original) {
     for (int row = 0; row < original.GetHeight(); ++row) {
         for (int col = 0; col < original.GetWidth(); ++col) {
@@ -182,7 +127,6 @@ Image& operator~(Image& original) {
     return original;
 }
 
-// Equality operator
 bool operator==(const Image& lhs, const Image& rhs) {
     if (lhs.GetHeight() != rhs.GetHeight() || lhs.GetWidth() != rhs.GetWidth()) {
         return false;
@@ -199,12 +143,10 @@ bool operator==(const Image& lhs, const Image& rhs) {
     return true;
 }
 
-// Inequality operator
 bool operator!=(const Image& lhs, const Image& rhs) {
     return !(lhs == rhs);
 }
 
-// Output stream operator
 std::ostream& operator<<(std::ostream& os, const Image& image) {
     for (int row = 0; row < image.GetHeight(); ++row) {
         for (int col = 0; col < image.GetWidth(); ++col) {
