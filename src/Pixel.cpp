@@ -2,7 +2,6 @@
 #include <iostream>
 #include <stdexcept>
 
-
 Pixel::Pixel(unsigned char pixel) {
     if (pixel != BLACK && pixel != GRAY && pixel != WHITE) {
         throw std::invalid_argument("Invalid pixel value");
@@ -10,16 +9,9 @@ Pixel::Pixel(unsigned char pixel) {
     color = pixel;
 }
 
-//Copy contstuctor
-Pixel::Pixel(const Pixel& other) {
-    (*this) = other;
-}
-
 Pixel operator|(const Pixel& original, const Pixel& other) {
     return Pixel(original.getColor() > other.getColor() ? original.getColor() : other.getColor());
 }
-
-
 
 Pixel& operator|=(Pixel& original, const Pixel& other) {
     original = original | other;
@@ -55,11 +47,6 @@ bool operator!=(const Pixel& first, const Pixel& other) {
 }
 
 std::ostream& operator<<(std::ostream& os, const Pixel& pixel) {
-    os << pixel.getColor(); // Print the character directly
+    os << pixel.getColor();
     return os;
 }
-
-//std::ostream& operator<<(std::ostream& os, const Pixel& pixel) {
-//    os << static_cast<int>(pixel.getColor()); // Assuming getColor() returns a color value
-//    return os;
-//}
